@@ -61,21 +61,22 @@ exports.login = async (req, res, next) => {
 exports.authenticate = async (req, res, next) => {
   try {
     // const headers = req.headers;
+    console.log(req.headers)
     const { authorization } = req.headers; //เก็บ token
     if (!authorization || !authorization.startsWith("Bearer")) {
-      return res.status(401).json({ message: "u are unauthorized" });
+      return res.status(401).json({ message: "u are unauthorized1" });
     }
 
     const token = authorization.split(" ")[1];
     if (!token) {
-      return res.status(401).json({ message: "u are unauthorized" });
+      return res.status(401).json({ message: "u are unauthorized2" });
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
-    // decoed {id:55,email:,username:}
+    // ได้ payload มา
     const user = await User.findOne({ where: { id: decoded.id } });
     if (!user) {
-      return res.status(401).json({ message: "u are unauthorized" });
+      return res.status(401).json({ message: "u are unauthorized3" });
     }
     req.user = user;
     req.data = decoded;

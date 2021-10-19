@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const userController=require('./controllers/userController')
 const restaurantRoute = require("./routes/restaurantRoute");
 const reviewRoute = require("./routes/reviewRoute");
 const userRoute = require("./routes/userRoute");
@@ -54,11 +55,13 @@ const upload = multer({
 });
 
 app.post(
-  "/create-store",
+  "/create-store",userController.authenticate,
   upload.single("cloudinput"), //เก็บไว้ใน public image
   async (req, res, next) => {
     // console.log(req.file); // ไฟล์รูปภาพที่ส่งมา
-    const { reviewTitle, reviewDetail, starRating, UserId, ResterauntId } =
+    console.log(req.user)
+    console.log('aaaaa',req.data)
+    const { reviewTitle, reviewDetail, starRating,ResterauntId } =
       req.body;
 
     try {
@@ -68,7 +71,7 @@ app.post(
         reviewTitle,
         reviewDetail,
         starRating,
-        UserId,
+        UserId:req.user.id,
         ResterauntId,
         reviewImage: result.secure_url,
       });
